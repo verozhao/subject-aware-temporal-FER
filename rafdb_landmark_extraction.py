@@ -114,7 +114,7 @@ class RAFDBProcessor:
         self.data_path = Path(data_path)
         self.min_landmarks = min_landmarks
         self.landmark_extractor = LandmarkExtractor(model_path, code_path=code_path)
-        self.blur_thresholds = {'not_blurry': 100.0, 'medium_blurry': 50.0}
+        self.blur_thresholds = {'not_blurry': 1420.2, 'medium_blurry': 552.9}
     
     def calculate_blurriness(self, image: np.ndarray) -> float:
         """Calculate Laplacian variance"""
