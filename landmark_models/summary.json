@@ -1,0 +1,52 @@
+{
+  "label_to_idx": {
+    "angry": 0,
+    "disgust": 1,
+    "fear": 2,
+    "happy": 3,
+    "neutral": 4,
+    "sad": 5,
+    "surprise": 6
+  },
+  "results": {
+    "not_blurry": {
+      "ckpt_path": "landmark_models\\model_not_blurry.pt",
+      "train_size": 10896,
+      "val_size": 1362,
+      "test_size": 1362,
+      "best_val_acc": 0.36270190895741555,
+      "test_acc": 0.3465491923641703,
+      "history_csv": "landmark_models\\history_not_blurry.csv",
+      "plots": [
+        "landmark_models\\loss_not_blurry.png",
+        "landmark_models\\acc_not_blurry.png"
+      ]
+    },
+    "medium_blurry": {
+      "ckpt_path": "landmark_models\\model_medium_blurry.pt",
+      "train_size": 10896,
+      "val_size": 1362,
+      "test_size": 1362,
+      "best_val_acc": 0.3568281938325991,
+      "test_acc": 0.34948604992657856,
+      "history_csv": "landmark_models\\history_medium_blurry.csv",
+      "plots": [
+        "landmark_models\\loss_medium_blurry.png",
+        "landmark_models\\acc_medium_blurry.png"
+      ]
+    },
+    "blurry": {
+      "ckpt_path": "landmark_models\\model_blurry.pt",
+      "train_size": 10898,
+      "val_size": 1362,
+      "test_size": 1362,
+      "best_val_acc": 0.4302496328928047,
+      "test_acc": 0.4199706314243759,
+      "history_csv": "landmark_models\\history_blurry.csv",
+      "plots": [
+        "landmark_models\\loss_blurry.png",
+        "landmark_models\\acc_blurry.png"
+      ]
+    }
+  }
+}
