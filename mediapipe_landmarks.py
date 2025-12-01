@@ -87,7 +87,7 @@ class RAFDBMediapipeProcessor:
 
 
 def main():
-    DATA_PATH = '/Users/test/DL/rafdb'
+    DATA_PATH = '/Users/test/DL/rafdb_augmented'
     OUTPUT_CSV = '/Users/test/subject-aware-temporal-FER/rafdb_mediapipe_landmarks.csv'
     processor = RAFDBMediapipeProcessor(DATA_PATH)
     df = processor.process_dataset()
