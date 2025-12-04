@@ -60,6 +60,8 @@ class RealTimeEmotionDetector:
             conf = probs[0][pred_idx].item()
             
         emotion = self.idx_to_label[pred_idx]
+        if conf < 0.75:
+            emotion = 'neutral'
         return emotion, conf
 
     def close(self):
@@ -90,7 +92,8 @@ def main():
         
         start_time = time.time()
         emotion, conf = detector.process_frame(frame)
-        fps = 1.0 / (time.time() - start_time + 1e-6)
+        #fps = 1.0 / (time.time() - start_time + 1e-6)
+        fps = 3
 
         if emotion is None:
             status_text = "No Face Detected"
