@@ -228,10 +228,23 @@ def train(args):
                                                       epochs=args.epochs, steps_per_epoch=len(train_loader))
     criterion = nn.CrossEntropyLoss(weight=class_weights, label_smoothing=0.1)
     
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+    log_file = log_dir / "single_train_log.txt"
+    
+    with open(log_file, "w") as f:
+        f.write(f"Training Log - Features: {input_dim}, LR: {args.lr}, Batch: {args.batch_size}\n")
+        f.write(f"{'Epoch':<10} | {'Train Loss':<12} | {'Val Loss':<12} | {'Val Acc':<10}\n")
+        f.write("-" * 55 + "\n")
+    
+    print(f"Logging to: {log_file}")
+
     best_val_acc, best_state, patience = 0, None, 0
     
     for epoch in range(args.epochs):
         model.train()
+        train_loss_sum = 0.0
+        train_batches = 0
         for x, y in train_loader:
             x, y = x.to(device), y.to(device)
             optimizer.zero_grad(set_to_none=True)
@@ -240,15 +253,33 @@ def train(args):
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
             scheduler.step()
+            train_loss_sum += loss.item()
+            train_batches += 1
+        
+        avg_train_loss = train_loss_sum / train_batches
         
         model.eval()
         correct, total = 0, 0
+        val_loss_sum = 0.0
+        val_batches = 0
+
         with torch.no_grad():
             for x, y in val_loader:
                 x, y = x.to(device), y.to(device)
                 correct += (model(x).argmax(1) == y).sum().item()
                 total += y.size(0)
+                loss = criterion(model(x), y)
+                val_loss_sum += loss.item()
+                val_batches += 1
+
         val_acc = correct / total
+        avg_val_loss = val_loss_sum / val_batches if val_batches > 0 else 0.0
+
+        log_str = f"Epoch {epoch+1}/{args.epochs} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Val Acc: {val_acc:.4f}"
+        print(log_str)
+        
+        with open(log_file, "a") as f:
+            f.write(f"{epoch+1:<10} | {avg_train_loss:<12.4f} | {avg_val_loss:<12.4f} | {val_acc:<10.4f}\n")
         
         if args.verbose:
             print(f"Epoch {epoch+1}: val_acc={val_acc:.4f}")
