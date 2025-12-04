@@ -87,8 +87,16 @@ class RAFDBMediapipeProcessor:
 
 
 def main():
-    DATA_PATH = '/Users/test/DL/rafdb_augmented'
-    OUTPUT_CSV = '/Users/test/subject-aware-temporal-FER/rafdb_mediapipe_landmarks.csv'
+    #DATA_PATH = '/Users/test/DL/rafdb'
+    DATA_PATH = 'C:\\794project_dataset\\RAF_DB'
+    if not Path(DATA_PATH).exists():
+        print(f"Data path {DATA_PATH} does not exist.")
+        return
+    #OUTPUT_CSV = '/Users/test/subject-aware-temporal-FER/test.csv'
+    OUTPUT_CSV = 'C:\\Documents\\CMU\\Courses\\Fall2025\\18-794\\Project\\subject-aware-temporal-FER\\test.csv'
+    if not Path(OUTPUT_CSV).parent.exists():
+        print(f"Output directory {Path(OUTPUT_CSV).parent} does not exist.")
+        return
     processor = RAFDBMediapipeProcessor(DATA_PATH)
     df = processor.process_dataset()
     if len(df) > 0:

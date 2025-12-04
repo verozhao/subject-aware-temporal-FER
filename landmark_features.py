@@ -198,7 +198,7 @@ class ResidualBlock(nn.Module):
 
 
 class LandmarkClassifier(nn.Module):
-    def __init__(self, input_dim: int, num_classes: int, hidden_dims: list = [256, 256, 128]):
+    def __init__(self, input_dim: int, num_classes: int, hidden_dims: list = [256, 256, 256, 128]):
         super().__init__()
         self.input_proj = nn.Sequential(
             nn.Linear(input_dim, hidden_dims[0]), nn.BatchNorm1d(hidden_dims[0]), nn.GELU(), nn.Dropout(0.3)
