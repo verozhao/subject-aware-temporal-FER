@@ -5,6 +5,7 @@ from torch.utils.data import Dataset, DataLoader, random_split, WeightedRandomSa
 import pandas as pd
 from pathlib import Path
 import argparse
+from model import LandmarkClassifier
 
 # key Mediapipe landmark indices for facial regions
 LANDMARK_GROUPS = {
@@ -184,49 +185,6 @@ class GeometricLandmarkDataset(Dataset):
         return self.augment
 
 
-class ResidualBlock(nn.Module):
-    def __init__(self, dim):
-        super().__init__()
-        self.block = nn.Sequential(
-            nn.Linear(dim, dim), nn.BatchNorm1d(dim), nn.GELU(), nn.Dropout(0.2),
-            nn.Linear(dim, dim), nn.BatchNorm1d(dim)
-        )
-        self.act = nn.GELU()
-    
-    def forward(self, x):
-        return self.act(x + self.block(x))
-
-
-class LandmarkClassifier(nn.Module):
-    def __init__(self, input_dim: int, num_classes: int, hidden_dims: list = [256, 256, 256, 128]):
-        super().__init__()
-        self.input_proj = nn.Sequential(
-            nn.Linear(input_dim, hidden_dims[0]), nn.BatchNorm1d(hidden_dims[0]), nn.GELU(), nn.Dropout(0.3)
-        )
-        layers = []
-        for i in range(len(hidden_dims) - 1):
-            if hidden_dims[i] == hidden_dims[i+1]:
-                layers.append(ResidualBlock(hidden_dims[i]))
-            else:
-                layers.append(nn.Sequential(
-                    nn.Linear(hidden_dims[i], hidden_dims[i+1]),
-                    nn.BatchNorm1d(hidden_dims[i+1]), nn.GELU(), nn.Dropout(0.2)
-                ))
-        self.layers = nn.Sequential(*layers)
-        self.head = nn.Linear(hidden_dims[-1], num_classes)
-        self._init_weights()
-
-    def _init_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
-
-    def forward(self, x):
-        return self.head(self.layers(self.input_proj(x)))
-
-
 def get_class_weights(targets: torch.Tensor, num_classes: int) -> torch.Tensor:
     counts = torch.bincount(targets, minlength=num_classes).float()
     weights = 1.0 / (counts + 1)
@@ -330,7 +288,7 @@ def train(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--csv", type=Path, default=Path("rafdb_mediapipe_landmarks.csv"))
+    parser.add_argument("--csv", type=Path, default=Path("landmark_features/rafdb_mediapipe_landmarks.csv"))
     parser.add_argument("--save_dir", type=Path, default=Path("geometric_models"))
     parser.add_argument("--resolution", type=str, default=None)
     parser.add_argument("--epochs", type=int, default=150)

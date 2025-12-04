@@ -1,0 +1,6 @@
+name: cmu794project
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+prefix: C:\Users\admin\miniforge3\envs\cmu794project

@@ -45,7 +45,7 @@ def calculate_all_blur_scores(csv_path):
 
 
 def main():
-    csv_path = '/Users/test/subject-aware-temporal-FER/rafdb_landmarks_processed.csv'
+    csv_path = '/Users/test/subject-aware-temporal-FER/landmark_features/rafdb_landmarks_processed.csv'
     
     blur_scores = calculate_all_blur_scores(csv_path)
     
