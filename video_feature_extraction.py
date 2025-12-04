@@ -103,8 +103,8 @@ class VideoDatasetProcessor:
         print(df['split'].value_counts())
 
 def main():
-    DATA_PATH = 'C:\\Users\\admin\\Downloads\\ravdess_emotion_frames'
-    OUTPUT_CSV = 'C:\\Documents\\CMU\\Courses\\Fall2025\\18-794\\Project\\subject-aware-temporal-FER\\landmark_features\\ravdess_landmarks_split.csv'
+    DATA_PATH = 'C:\\Users\\admin\\Downloads\\ravdess_emotion_frames' # fill in your data path here
+    OUTPUT_CSV = './landmark_features/ravdess_landmarks_split.csv'
 
     if not Path(DATA_PATH).exists():
         print(f"Data path {DATA_PATH} does not exist.")
