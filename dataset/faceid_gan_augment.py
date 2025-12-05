@@ -259,10 +259,10 @@ def main():
     dataset_aug.train_augmentor(epochs=30, batch_size=8)
     augmentor.save(MODEL_PATH)
     
-    print("Augmenting dataset...")
-    ten_strengths = np.linspace(0.5, 1.5, 10).tolist()
-    dataset_aug.augment_dataset(OUTPUT_PATH, strengths=ten_strengths)
-    print("Done!")
+    # print("Augmenting dataset...")
+    # ten_strengths = np.linspace(0.5, 1.5, 10).tolist()
+    # dataset_aug.augment_dataset(OUTPUT_PATH, strengths=ten_strengths)
+    # print("Done!")
 
 if __name__ == "__main__":
     main()

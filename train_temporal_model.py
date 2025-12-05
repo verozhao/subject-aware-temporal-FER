@@ -110,7 +110,7 @@ def compute_dataset_stats(dataset):
 
 def train_temporal_model():
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    CSV_PATH = 'landmark_features/rafdess_landmarks_split.csv'
+    CSV_PATH = 'landmark_features/ravdess_landmarks_split.csv'
     PRETRAINED_PATH = 'geometric_models/model.pt'
     SAVE_DIR = Path('temporal_models')
     SAVE_DIR.mkdir(exist_ok=True)
@@ -195,6 +195,8 @@ def train_temporal_model():
         model.eval()
         val_correct = 0
         val_total = 0
+        val_loss = 0.0
+        val_loss_count = 0
         with torch.no_grad():
             for x, y in val_loader:
                 x, y = x.to(DEVICE), y.to(DEVICE)
@@ -202,10 +204,14 @@ def train_temporal_model():
                 logits = model(x)
                 val_correct += (logits.argmax(dim=1) == y).sum().item()
                 val_total += y.size(0)
+                loss = criterion(logits, y)
+                val_loss += loss.item()
+                val_loss_count += 1
         
         val_acc = val_correct / val_total if val_total > 0 else 0
+        avg_val_loss = val_loss / val_loss_count if val_loss_count > 0 else 0
         
-        print(f"Epoch {epoch+1}/{EPOCHS} | Loss: {avg_loss:.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
+        print(f"Epoch {epoch+1}/{EPOCHS} | Loss: {avg_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}")
         
         scheduler.step(val_acc)
         

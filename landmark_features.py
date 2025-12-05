@@ -245,6 +245,7 @@ def train(args):
         model.train()
         train_loss_sum = 0.0
         train_batches = 0
+        correct, total = 0, 0
         for x, y in train_loader:
             x, y = x.to(device), y.to(device)
             optimizer.zero_grad(set_to_none=True)
@@ -255,8 +256,12 @@ def train(args):
             scheduler.step()
             train_loss_sum += loss.item()
             train_batches += 1
+            pred = model(x).argmax(1)
+            correct += (pred == y).sum().item()
+            total += y.size(0)
         
         avg_train_loss = train_loss_sum / train_batches
+        train_acc = correct / total
         
         model.eval()
         correct, total = 0, 0
@@ -275,11 +280,11 @@ def train(args):
         val_acc = correct / total
         avg_val_loss = val_loss_sum / val_batches if val_batches > 0 else 0.0
 
-        log_str = f"Epoch {epoch+1}/{args.epochs} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Val Acc: {val_acc:.4f}"
+        log_str = f"Epoch {epoch+1}/{args.epochs} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f}"
         print(log_str)
         
         with open(log_file, "a") as f:
-            f.write(f"{epoch+1:<10} | {avg_train_loss:<12.4f} | {avg_val_loss:<12.4f} | {val_acc:<10.4f}\n")
+            f.write(f"{epoch+1:<10} | {avg_train_loss:<12.4f} | {avg_val_loss:<12.4f} | {train_acc:<10.4f} | {val_acc:<10.4f}\n")
         
         if args.verbose:
             print(f"Epoch {epoch+1}: val_acc={val_acc:.4f}")
