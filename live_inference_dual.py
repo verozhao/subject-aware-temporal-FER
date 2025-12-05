@@ -117,13 +117,13 @@ def main():
             
         # Flip frame horizontally for mirror effect
         frame = cv2.flip(frame, 1)
-        h, w, _ = frame.shape
+        clean_frame = frame.copy()
         
-        # --- Process Frame ---
+        h, w, _ = frame.shape
+
         start_time = time.time()
         emotion, conf, landmarks = detector.process_frame(frame)
         
-        # --- Visualization: Draw Landmarks ---
         if landmarks is not None:
             for i, lm in enumerate(landmarks):
                 # Convert normalized coordinates to pixel coordinates
@@ -167,9 +167,8 @@ def main():
         
         # FPS counter
         cv2.putText(frame, f"FPS: {int(fps)}", (w - 120, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (200, 200, 200), 1)
-
-        # Show frame
         cv2.imshow('Live LSTM Emotion Detector', frame)
+        cv2.imshow('Raw Camera Feed', clean_frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
