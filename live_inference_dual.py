@@ -82,7 +82,7 @@ class RealTimeEmotionDetector:
         emotion = self.idx_to_label[pred_idx]
 
         # G. Confidence Thresholding
-        if conf < 0.75:
+        if conf < 0.6:
             emotion = 'neutral'
             
         return emotion, conf, landmarks
@@ -152,7 +152,7 @@ def main():
             current_conf = conf
             
             # Change color based on confidence or forced neutral
-            if current_conf < 0.75 and emotion == 'neutral':
+            if current_conf < 0.6 and emotion == 'neutral':
                  status_text = f"NEUTRAL (Low Conf: {current_conf:.1%})"
                  color = (150, 150, 150) # Grey for uncertain fallback
             else:
