@@ -1,21 +1,8 @@
-# Robust Facial Emotion Recognition with Subject Conditioning and Continuous Facial Motion Detection
-Robust Facial Emotion Recognition with Subject Conditioning and Continuous Facial Motion Detection
-Facial emotion recognition (FER) is a critical technology for next-generation human-computer
-interaction, enabling applications from adaptive tutoring systems to driver safety monitoring. For
-these systems to be effective, their predictions must be not only accurate but also stable and reliable
-over time. However, real-world conditions present significant challenges: faces are often partially
-occluded, with constant variations in pose and lighting. Furthermore, existing models struggle to
-generalize across different individuals and often fail to capture subtle, low-amplitude expressions.
+# Robust Facial Emotion Recognition with Geometric Landmark Encoding and Continuous Facial Motions
+Facial Emotion Recognition (FER) is a critical technology for next-generation human-computer interaction, enabling applications from adaptive tutoring systems to driver safety monitoring. For these systems to be effective, their predictions must be accurate and stable and reliable over time. However, real-world conditions present significant challenges: faces are often partially occluded, with constant variations in pose and lighting. Furthermore, existing models struggle to generalize across different individuals and often fail to capture subtle, low-amplitude expressions.
 
-While modern deep learning approaches have improved upon classical methods, they still have
-key limitations. CNN-based models, though powerful, often produce unstable, frame-by-frame
-predictions and perform poorly when faced with data from new subjects or environments. Sequence
-models like RNNs can improve temporal consistency but at a high computational cost, making them
-less suitable for real-time applications.
+Although modern deep learning approaches have improved on the classical methods, they still have key limitations. CNN-based models, though powerful, often produce unstable frame-by-frame predictions and perform poorly when faced with data from new subjects or environments. Sequence models like RNNs can improve temporal consistency but at a high computational cost, making them less suitable for real-time applications.
 
-Two primary gaps remain in current research: (1) inadequate adaptation to the unique facial mor-
-phology of each input, and (2) insufficient use of short-term facial dynamics, which are crucial for
-distinguishing near-neutral expressions. Our project directly addresses these gaps. We propose to
-build upon strong CNN baselines by introducing two key innovations: subject-specific conditioning
-and a temporal model based on facial landmark motion, aiming to create a more robust and reliable
-FER system for real-world applications.
+Two primary gaps remain in current research: inadequate adaptation to the unique facial morphology of each input, and insufficient use of short-term facial dynamics, which are crucial for distinguishing near-neutral expressions. Our project directly addresses these gaps. We start with a naive initial experiment that utilizes only five landmarks and their relative distances to build a shallow Multi-Layer perception (MLP) to classify different facial emotions. Based on results of the initial experiment, we gained insight of how influential these landmarks could be in FER tasks. Then, we started our next-stage solution. 
+
+Specifically, our next-stage solution begins with dataset reinforcement, followed by a critical phase of feature extraction. We apply standardizations and then synthesize the raw landmark features into highly informative geometric attributes. Once robust accuracy is achieved in single-frame FER, we fine-tune the model by incorporating a temporal layer to leverage short-term facial dynamics for enhanced real-time detection accuracy, aiming to create a more robust and reliable FER system for real-world applications.
